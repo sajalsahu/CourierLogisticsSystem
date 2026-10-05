@@ -32,5 +32,24 @@ public class DeliveryAgentController {
     public ResponseEntity<ResponseStructure<DeliveryAgent>> getAgentByPhone(@PathVariable Long phone){
         return new ResponseEntity<>(deliveryAgentService.getByPhone(phone), HttpStatus.OK);
     }
-
+    @GetMapping("/vehicle/{vehicleNo}")
+    public ResponseEntity<ResponseStructure<DeliveryAgent>> getAgentByVehicleNo(@PathVariable String vehicleNo){
+        return new ResponseEntity<>(deliveryAgentService.getByVehicleNo(vehicleNo), HttpStatus.OK);
+    }
+    @GetMapping("/rating/{rating")
+    public ResponseEntity<ResponseStructure<List<DeliveryAgent>>> getAgentByRating(@PathVariable Double rating){
+        return new ResponseEntity<>(deliveryAgentService.getByRatingGreaterThanEqual(rating), HttpStatus.OK);
+    }
+    @PutMapping
+    public ResponseEntity<ResponseStructure<DeliveryAgent>> updateAgent(@RequestBody DeliveryAgent deliveryAgent){
+        return new ResponseEntity<>(deliveryAgentService.updateAgent(deliveryAgent), HttpStatus.OK);
+    }
+    @DeleteMapping
+    public ResponseEntity<ResponseStructure<DeliveryAgent>> deleteAgent(@PathVariable Integer id){
+        return new ResponseEntity<>(deliveryAgentService.deleteAgent(id), HttpStatus.OK);
+    }
+    @PatchMapping("{id}/availability")
+    public ResponseEntity<ResponseStructure<DeliveryAgent>> updateAgentAvailability(@PathVariable Integer id, @RequestBody Boolean availability){
+        return new ResponseEntity<>(deliveryAgentService.updateAvailability(id, availability), HttpStatus.OK);
+    }
 }
