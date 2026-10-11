@@ -76,15 +76,20 @@ public class DeliveryAgentService {
         throw new NoRecordAvailableException("Vehicle number is not found");
     }
     public ResponseStructure<List<DeliveryAgent>> getByRatingGreaterThanEqual(Double rating){
+        if (rating == null || rating < 0 || rating > 5) {
+            throw new IllegalArgumentException(
+                    "Rating must be between 0 and 5"
+            );
+        }
         List<DeliveryAgent> deliveryAgents = deliveryAgentRepository.findByRatingGreaterThanEqual(rating);
         ResponseStructure<List<DeliveryAgent>> res = new ResponseStructure<>();
-        if(deliveryAgents.isEmpty()){
-            res.setStatusCode(HttpStatus.NO_CONTENT.value());
-            res.setMessage("Agent not found");
-            res.setData(deliveryAgents);
-            return res;
+        if(deliveryAgents.isEmpty()) {
+            throw new NoRecordAvailableException("Agent not found");
         }
-        throw new NoRecordAvailableException("Agent not found");
+        res.setStatusCode(HttpStatus.NO_CONTENT.value());
+        res.setMessage("Agent not found");
+        res.setData(deliveryAgents);
+        return res;
     }
     public ResponseStructure<DeliveryAgent> updateAgent(DeliveryAgent deliveryAgent) {
         if (deliveryAgent.getId() == null || !deliveryAgentRepository.existsById(deliveryAgent.getId())) {
@@ -119,6 +124,11 @@ public class DeliveryAgentService {
         throw new NoRecordAvailableException("Agent id is not found");
     }
     public ResponseStructure<DeliveryAgent> updateAvailability(Integer id,Boolean status) {
+        if (status == null) {
+            throw new IllegalArgumentException(
+                    "Availability status cannot be null"
+            );
+        }
         Optional<DeliveryAgent> agent = deliveryAgentRepository.findById(id);
         ResponseStructure<DeliveryAgent> res = new ResponseStructure<>();
         if (agent.isPresent()) {
