@@ -18,11 +18,11 @@ public class WarehouseController {
 
     @PostMapping
     public ResponseEntity<ResponseStructure<Warehouse>> createWarehouse(@RequestBody Warehouse warehouse) {
-        return new ResponseEntity<>(warehouseService.createWarehouse(warehouse), HttpStatus.OK);
+        return new ResponseEntity<>(warehouseService.createWarehouse(warehouse), HttpStatus.CREATED);
     }
     @GetMapping
     public ResponseEntity<ResponseStructure<List<Warehouse>>> getAllWarehouse() {
-        return new ResponseEntity<>(warehouseService.getAllWarehouses(), HttpStatus.CREATED);
+        return new ResponseEntity<>(warehouseService.getAllWarehouses(), HttpStatus.OK);
     }
     @GetMapping("/{id}")
     public ResponseEntity<ResponseStructure<Warehouse>> getWarehouseById(@PathVariable Integer id) {
