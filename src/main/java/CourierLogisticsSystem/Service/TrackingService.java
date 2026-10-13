@@ -23,7 +23,7 @@ public class TrackingService {
         List<TrackingHistory>  trackingHistories = trackingHistoryRepository.findAll();
         ResponseStructure<List<TrackingHistory>> res = new ResponseStructure<>();
         if(trackingHistories.isEmpty()){
-            throw new NoRecordAvailableException("No history found");
+            throw new NoRecordAvailableException("No tracking history records available");
         }
         res.setStatusCode(HttpStatus.OK.value());
         res.setData(trackingHistories);
@@ -34,11 +34,11 @@ public class TrackingService {
         Optional<TrackingHistory> trackingHistory = trackingHistoryRepository.findById(id);
         ResponseStructure<TrackingHistory> res = new ResponseStructure<>();
         if(trackingHistory.isEmpty()){
-            throw new NoRecordAvailableException("No history found");
+            throw new NoRecordAvailableException("Tracking history ID not found");
         }
         res.setStatusCode(HttpStatus.OK.value());
         res.setData(trackingHistory.get());
-        res.setMessage("Success");
+        res.setMessage("Tracking history found successfully");
         return res;
     }
 
