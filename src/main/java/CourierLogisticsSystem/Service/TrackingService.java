@@ -3,6 +3,7 @@ package CourierLogisticsSystem.Service;
 import CourierLogisticsSystem.DTO.ResponseStructure;
 import CourierLogisticsSystem.Entity.TrackingHistory;
 import CourierLogisticsSystem.ExceptionLayer.NoRecordAvailableException;
+import CourierLogisticsSystem.Repository.ShipmentRepository;
 import CourierLogisticsSystem.Repository.TrackingHistoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,6 +16,8 @@ import java.util.Optional;
 public class TrackingService {
     @Autowired
     private TrackingHistoryRepository trackingHistoryRepository;
+    @Autowired
+    private ShipmentRepository shipmentRepository;
 
     public ResponseStructure<List<TrackingHistory>> getAllTrackingHistoy(){
         List<TrackingHistory>  trackingHistories = trackingHistoryRepository.findAll();
@@ -24,7 +27,7 @@ public class TrackingService {
         }
         res.setStatusCode(HttpStatus.OK.value());
         res.setData(trackingHistories);
-        res.setMessage("Success");
+        res.setMessage("Tracking history retrieved successfully");
         return res;
     }
     public ResponseStructure<TrackingHistory> getTrackingHistoryById(Integer id){
