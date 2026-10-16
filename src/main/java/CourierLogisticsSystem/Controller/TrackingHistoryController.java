@@ -23,4 +23,7 @@ public class TrackingHistoryController {
     public ResponseEntity<ResponseStructure<List<TrackingHistory>>> getAllTrackingHistory() {
         return new ResponseEntity<>(trackingService.getAllTrackingHistoy(), HttpStatus.OK);
     }
+    public ResponseEntity<ResponseStructure<TrackingHistory>> getTrackingHistoryById(Integer id) {
+        return new ResponseEntity<>(trackingService.getTrackingHistoryById(id), HttpStatus.OK);
+    }
 }
