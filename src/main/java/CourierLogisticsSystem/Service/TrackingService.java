@@ -41,5 +41,8 @@ public class TrackingService {
         res.setMessage("Tracking history found successfully");
         return res;
     }
+    public ResponseStructure<TrackingHistory> getByTrackingNumber(String name){
+
+    }
 
 }
