@@ -81,4 +81,25 @@ public class PaymentService {
         }
         return current;
     }
+    public ResponseStructure<Payment> deletePayment(Integer id) {
+        Optional<Payment> optional = paymentRepository.findById(id);
+        if (optional.isPresent()) {
+            Payment payment = optional.get();
+
+            // rule: only failed or refunded payments can be deleted
+            if (payment.getPaymentStatus() != PaymentStatus.FAILED
+                    && payment.getPaymentStatus() != PaymentStatus.REFUNDED) {
+                throw new OperationNotAllowedException(
+                        "Only FAILED or REFUNDED payments can be deleted");
+            }
+
+            paymentRepository.delete(payment);
+            ResponseStructure<Payment> res = new ResponseStructure<>();
+            res.setStatusCode(HttpStatus.OK.value());
+            res.setMessage("Payment deleted successfully");
+            res.setData(payment);
+            return res;
+        }
+        throw new IdNotFoundException("Payment id is not found");
+    }
 }
