@@ -2,14 +2,17 @@ package CourierLogisticsSystem.Service;
 
 import CourierLogisticsSystem.DTO.ResponseStructure;
 import CourierLogisticsSystem.Entity.Payment;
+import CourierLogisticsSystem.Entity.PaymentStatus;
 import CourierLogisticsSystem.ExceptionLayer.IdNotFoundException;
 import CourierLogisticsSystem.ExceptionLayer.NoRecordAvailableException;
+import CourierLogisticsSystem.ExceptionLayer.OperationNotAllowedException;
 import CourierLogisticsSystem.Repository.PaymentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -39,6 +42,43 @@ public class PaymentService {
             return res;
         }
         throw  new IdNotFoundException("Payment id is not found");
+    }
+    public ResponseStructure<Payment> updateStatus(Integer id, PaymentStatus newStatus) {
+        Optional<Payment> optional = paymentRepository.findById(id);
+        if (optional.isPresent()) {
+            Payment payment = optional.get();
+            PaymentStatus current = getPaymentStatus(newStatus, payment);
+            // rule: a completed payment cannot go back to pending or failed
+            if (current == PaymentStatus.COMPLETED
+                    && (newStatus == PaymentStatus.PENDING || newStatus == PaymentStatus.FAILED)) {
+                throw new OperationNotAllowedException("Completed payment cannot be changed to " + newStatus);
+            }
 
+            payment.setPaymentStatus(newStatus);
+            if (newStatus == PaymentStatus.COMPLETED) {
+                payment.setPaymentDateTime(LocalDateTime.now());   // time the money was received
+            }
+
+            ResponseStructure<Payment> res = new ResponseStructure<>();
+            res.setStatusCode(HttpStatus.OK.value());
+            res.setMessage("Payment status updated successfully");
+            res.setData(paymentRepository.save(payment));
+            return res;
+        }
+        throw new IdNotFoundException("Payment id is not found");
+    }
+
+    private static PaymentStatus getPaymentStatus(PaymentStatus newStatus, Payment payment) {
+        PaymentStatus current = payment.getPaymentStatus();
+
+        // rule: a refunded payment is closed
+        if (current == PaymentStatus.REFUNDED) {
+            throw new OperationNotAllowedException("Payment is already refunded, status cannot be changed");
+        }
+        // rule: only a completed payment can be refunded
+        if (newStatus == PaymentStatus.REFUNDED && current != PaymentStatus.COMPLETED) {
+            throw new OperationNotAllowedException("Only a completed payment can be refunded");
+        }
+        return current;
     }
 }
