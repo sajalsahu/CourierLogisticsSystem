@@ -27,5 +27,8 @@ public class PaymentController {
     public ResponseEntity<ResponseStructure<Payment>> updatePaymentStatus(@PathVariable Integer id, @RequestParam PaymentStatus status) {
         return new ResponseEntity<>(paymentService.updateStatus(id, status), HttpStatus.OK);
     }
-
+    @DeleteMapping("{id}")
+    public ResponseEntity<ResponseStructure<Payment>> deletePaymentById(@PathVariable Integer id) {
+        return new ResponseEntity<>(paymentService.deletePayment(id), HttpStatus.OK);
+    }
 }
