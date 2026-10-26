@@ -24,4 +24,8 @@ public class PackageController {
         return new ResponseEntity<>(packageService.getAllPackages(), HttpStatus.OK);
     }
 
+    @GetMapping("{id}")
+    public ResponseEntity<ResponseStructure<Package>> getPackageById(@PathVariable Integer id) {
+        return new ResponseEntity<>(packageService.getPackageById(id), HttpStatus.OK);
+    }
 }
