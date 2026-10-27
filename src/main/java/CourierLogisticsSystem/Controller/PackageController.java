@@ -2,6 +2,7 @@ package CourierLogisticsSystem.Controller;
 
 import CourierLogisticsSystem.DTO.ResponseStructure;
 import CourierLogisticsSystem.Entity.Package;
+import CourierLogisticsSystem.Entity.PackageType;
 import CourierLogisticsSystem.Service.PackageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,9 +24,12 @@ public class PackageController {
     public ResponseEntity<ResponseStructure<List<Package>>>getAllPackages() {
         return new ResponseEntity<>(packageService.getAllPackages(), HttpStatus.OK);
     }
-
     @GetMapping("{id}")
     public ResponseEntity<ResponseStructure<Package>> getPackageById(@PathVariable Integer id) {
         return new ResponseEntity<>(packageService.getPackageById(id), HttpStatus.OK);
+    }
+    @GetMapping("/type/{packageType}")
+    public ResponseEntity<ResponseStructure<List<Package>>> getByType(@PathVariable PackageType packageType) {
+        return new ResponseEntity<>(packageService.getPackageByType(packageType), HttpStatus.OK);
     }
 }
