@@ -44,7 +44,7 @@ public class ShipmentService {
         res.setData(shipments);
         return res;
     }
-    public ResponseStructure<Shipment> getShipmentById(Integer id){
+    public ResponseStructure<Shipment> getById(Integer id){
         Optional<Shipment> shipment = shipmentRepository.findById(id);
         ResponseStructure<Shipment> res = new ResponseStructure<>();
         if(shipment.isPresent()){
