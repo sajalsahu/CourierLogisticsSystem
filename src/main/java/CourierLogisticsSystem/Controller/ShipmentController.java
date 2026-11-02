@@ -27,8 +27,4 @@ public class ShipmentController {
     public ResponseEntity<ResponseStructure<Shipment>> getById(@PathVariable Integer id) {
         return new ResponseEntity<>(shipmentService.getById(id), HttpStatus.OK);
     }
-    @GetMapping("/tracking/{trackingNo}")
-    public ResponseEntity<ResponseStructure<Shipment>> getByTrackingNo(@PathVariable Long trackingNo) {
-        return new ResponseEntity<>(shipmentService.getByTrackingNo(trackingNo), HttpStatus.OK);
-    }
 }
